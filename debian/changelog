@@ -1,8 +1,8 @@
-apertium-swe (0.7.0~r69513-1+wmf1) jessie-wikimedia; kurgency=low
+apertium-swe (0.7.0~r69513-1+wmf1) jessie-wikimedia; urgency=low
 
   * Rebuild for Jessie.
 
- -- Kartik Mistry <kartik@debian.org>  Tue, 14 Jun 2016 10:13:14 +0530
+ -- Kartik Mistry <kartik@debian.org>  Thu, 22 Sep 2016 10:30:40 +0530
 
 apertium-swe (0.7.0~r69513-1) unstable; urgency=low
 
