@@ -2,10 +2,11 @@ Source: apertium-swe
 Section: science
 Priority: optional
 Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
-Uploaders: Tino Didriksen <tino@didriksen.cc>, Kartik Mistry <kartik@debian.org>
+Uploaders: Tino Didriksen <tino@didriksen.cc>,
+           Kartik Mistry <kartik@debian.org>
 Build-Depends: apertium-dev (>= 3.4),
                autotools-dev,
-               cg3,
+               cg3 (>= 1.0.0~r12254),
                debhelper (>= 9),
                dh-autoreconf,
                gawk,
@@ -17,6 +18,9 @@ Vcs-Browser: https://anonscm.debian.org/cgit/debian-science/packages/apertium-sw
 
 Package: apertium-swe
 Architecture: all
-Depends: apertium (>= 3.4), cg3, ${misc:Depends}, ${shlibs:Depends}
+Depends: apertium (>= 3.4),
+         cg3 (>= 1.0.0~r12254),
+         ${misc:Depends},
+         ${shlibs:Depends}
 Description: Apertium single language data for Swedish
  Data package providing Apertium language resources for Swedish

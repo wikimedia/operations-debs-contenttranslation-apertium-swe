@@ -1,3 +1,9 @@
+apertium-swe (0.7.0~r69513-1+wmf2) jessie-wikimedia; urgency=low
+
+  * Updated dependency on cg3.
+
+ -- Kartik Mistry <kartik@debian.org>  Wed, 10 Jan 2018 10:57:11 +0530
+
 apertium-swe (0.7.0~r69513-1+wmf1) jessie-wikimedia; urgency=low
 
   * Rebuild for Jessie.
