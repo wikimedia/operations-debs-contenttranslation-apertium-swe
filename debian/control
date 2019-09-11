@@ -12,15 +12,12 @@ Build-Depends: apertium-dev (>= 3.4),
                gawk,
                pkg-config (>= 0.21)
 Standards-Version: 3.9.8
-Homepage: http://apertium.org/
-Vcs-Git: https://anonscm.debian.org/cgit/debian-science/packages/apertium-swe.git
-Vcs-Browser: https://anonscm.debian.org/cgit/debian-science/packages/apertium-swe.git
+Homepage: https://apertium.org/
+Vcs-Git: https://salsa.debian.org/science-team/apertium-swe.git
+Vcs-Browser: https://salsa.debian.org/science-team/apertium-swe
 
 Package: apertium-swe
 Architecture: all
-Depends: apertium (>= 3.4),
-         cg3 (>= 1.0.0~r12254),
-         ${misc:Depends},
-         ${shlibs:Depends}
+Depends: apertium (>= 3.4), cg3 (>= 1.0.0~r12254), ${misc:Depends}
 Description: Apertium single language data for Swedish
- Data package providing Apertium language resources for Swedish
+ Data package providing Apertium language resources for Swedish.
