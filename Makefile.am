@@ -2,8 +2,6 @@
 ## Makefile for apertium-swe
 ###############################################################################
 
-RELEASE=0.7
-VERSION=0.7.0
 LANG1=swe
 BASENAME=apertium-$(LANG1)
 
@@ -25,6 +23,7 @@ $(LANG1).autogen.bin: $(BASENAME).$(LANG1).dix .deps/.d
 
 $(LANG1).automorf.bin: $(BASENAME).$(LANG1).dix
 	apertium-validate-dictionary $<
+	test ! -f ./test-scandivoc || ./test-scandivoc
 	lt-comp lr $< $@ $(BASENAME).$(LANG1).acx
 
 $(LANG1).autogen.att.gz: $(LANG1).autogen.bin
@@ -76,7 +75,7 @@ modes/$(LANG1)-morph.mode: modes.xml
 
 noinst_DATA=modes/$(LANG1)-morph.mode
 
-install-data-local:
+install-data-local: install-modes
 	test -d $(DESTDIR)$(apertium_swe_srcdir) || mkdir -p $(DESTDIR)$(apertium_swe_srcdir)
 	$(INSTALL_DATA) $(BASENAME).$(LANG1).dix $(DESTDIR)$(apertium_swe_srcdir)
 	$(INSTALL_DATA) $(BASENAME).$(LANG1).rlx $(DESTDIR)$(apertium_swe_srcdir)
@@ -92,7 +91,8 @@ clean-local:
 
 test: all
 	echo 'Pippi var ett mycket märkvärdigt barn' | apertium -d . swe-morph | tee .test-mt
-	@echo '^Pippi/pippi<n><ut><sg><ind><nom>/pippi<n><ut><sg><ind><nom>$$ ^var/var<adj>/var<adv>/vara<vblex><past><actv>/var<prn><ut><sg><nom>/var<n><nt><sg><ind><nom>/var<n><nt><sg><ind><nom>$$ ^ett/en<det><ind><nt><sg>/en<num><nt><sg><nom>$$ ^mycket/mycket<adv><pst>/mycken<prn><pst><ind><nt><sg><nom>$$ ^märkvärdigt/märkvärdig<adj><sint><pst><nt><sg><ind><nom>$$ ^barn/barn<n><nt><sg><ind><nom>/barn<n><nt><pl><ind><nom>/barn<n><nt><sg><ind><nom>/barn<n><nt><pl><ind><nom>$$^./.<sent>$$' > .test-ref
+	@echo '^Pippi/Pippi<np><ant><f>/Pippi<np><ant><f>/pippi<n><ut><sg><ind>/pippi<n><ut><sg><ind>$$ ^var/vara¹<vblex><past><actv>/var<adv>/var<n><nt><sg><ind>/var<adj><pst><un><pl><def>/var<adj><pst><un><pl><ind>/var<adj><pst><fn><sg><def>/var<adj><pst><m><sg><def>/var<adj><pst><nt><sg><ind>/var<adj><pst><ut><sg><ind>/var<n><nt><sg><ind>/var<prn><def><ut><sg><nom>$$ ^ett/en<det><qnt><nt><sg>/en<det><ind><nt><sg>$$ ^mycket/mycket<adv><pst>/mycken<adj><sint><pst><nt><sg><ind>/mycken<prn><pst><ind><nt><sg><nom>$$ ^märkvärdigt/märkvärdig<adj><sint><pst><nt><sg><ind>$$ ^barn/barn<n><nt><sg><ind>/barn<n><nt><pl><ind>/barn<n><nt><sg><ind>/barn<n><nt><pl><ind>$$^./.<sent>$$' > .test-ref
 	@diff .test-ref .test-mt
 	@rm .test-ref .test-mt
 
+check: test

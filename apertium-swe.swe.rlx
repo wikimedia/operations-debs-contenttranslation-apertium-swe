@@ -20,6 +20,8 @@ LIST Cnjcoo = cnjcoo ;
 LIST Ij = Ij ;
 
 LIST Dem = dem ;
+LIST Qnt = qnt ;
+LIST Emph = emph ;
 
 LIST Cop = "vara¹" "bli";
 
@@ -31,6 +33,7 @@ LIST Pl2 = (p2 pl) ;
 LIST Pl3 = (p3 pl) ;
 
 LIST Inf = inf ;
+LIST Pasv = pasv ;
 LIST Supn = supn ;
 LIST PrsPrc = pprs ;
 LIST Pp = pp ;
@@ -54,10 +57,6 @@ LIST Pres = pres ;
 LIST Imp = imp ;
 LIST Past = past ;
 
-LIST Kunna = "kunna" ;
-LIST Vilja = "vilja" ;
-LIST Ha = "ha" ;
-
 LIST Sg = sg ;
 LIST Pl = pl ;
 LIST Sp = sp ;
@@ -73,7 +72,7 @@ LIST IndA = (adj ind) (adj comp) ;
 LIST EOS = <<<;
 LIST BOS = >>>;
 
-SET Aux = Kunna | Vilja ;
+LIST Aux = "kunna" "måste" "vara¹" "bli" "ha" ;
 
 SET Nomen = N or Prop;
 
@@ -97,6 +96,7 @@ LIST farliga-V = "<vart>"i "<sakta>"i;
 
 SECTION frequent;
 
+SELECT:hon Prn IF (0 ("<hon>"i)) ; # any safe contexts for the noun?
 SELECT:jag Prn IF (0 ("<jag>"i)) (NOT -1 ("<ett>"i)) ;
 
 REMOVE:med N IF (0 ("<med>"i)) (NOT *0 ("<släde>"i)) ;
@@ -114,6 +114,8 @@ SELECT Num IF (0 ("sex"i)) (1 N) ;
 "<fast>" SELECT:en-fast-idé A IF (-1C Det OR Prn) (1C N OR Prop) ;
 
 "<sina>" REMOVE:sina V IF (*0 V);
+
+REMOVE:unlikely ("<bara>"i "bar");
 
 
 SECTION grammatical;
@@ -140,11 +142,11 @@ SELECT Past IF (0 Var) (-1 N OR Prn) ;
 SELECT Inf IF (-1 Aux) ;
 SELECT:att Inf IF (-1 ("att")) ;
 
-REMOVE Def IF (0 Prop) ;
+SELECT:kan-ses Inf + Pasv IF (*-1 Aux BARRIER Fin OR Cnjsub) ;
 
 REMOVE:en-blå-kon N + Def IF (0 N + Ind) (*-1 Det + Ind CBARRIER NotIndA) ;
 
-SELECT Supn IF (-1* Ha BARRIER (*) - Adv) ;
+SELECT Supn IF (-1* ("ha") BARRIER (*) - Adv) ;
 
 SELECT:en-dansk-ö N + $$Number IF
         (-1 A + $$Number)
@@ -172,6 +174,13 @@ SELECT:dina-barn-skriker N + $$Number IF
         (NEGATE 0 V LINK -1 Prn)
         (NEGATE 0 Ind LINK -1 Dem)
         (NEGATE 0 A OR Det LINK 1 N)
+        (NEGATE 0 A OR Det LINK 1 A LINK 1 N)
+        ;
+
+SELECT:en-oberoende-ideell-förening A + Ind + $$Number + $$Gender IF
+        (-1 Det LINK 0C $$Number)
+        (1 A + Ind + $$Number + $$Gender LINK 1 N)
+        (NEGATE 0 V LINK -1 Prn)
         ;
 
 SELECT:mycket-låg Adv IF
@@ -200,6 +209,11 @@ SELECT:flygledarnas-händer Possessed IF
         (-1C Gen)
         ;
 
+REMOVE ("stadion") IF (0 ("stadium"));
+
+"<vid>" SELECT:vid-behov Pr IF (1 ("behov")) ;
+"<vid>" SELECT:i-vid-mening A IF (-1 ("<i>")) (1 N + Ind) ;
+
 #SELECT:r1 Def IF (0 A) (0 Pl) (1C N) (1C Def) ;
 #SELECT:r3 Vbser IF (0 ("<vara>")) (NOT -1 ("<en>")) ;
 
@@ -207,15 +221,30 @@ SELECT:flygledarnas-händer Possessed IF
 
 #SELECT A + $$Number IF (0 A) (NOT 0 Pr) (1 N + $$Number) ;
 
+SELECT:sina-egna Emph IF (-1 ("sin"));
+
+"<de>" REMOVE Prop IF (NEGATE -1 Prop) ;
+
+REMOVE:alla-de-ämnen Prn IF (-1 Qnt OR ("båda") OR ("bägge")) (0 Dem + $$Number) (1 N + $$Number) ;
+
+REMOVE:stora-barn Def IF
+        (0C A)
+        (1C N)
+        (NOT 1 Def)
+        ;
+
 SECTION heuristic;
 
-SELECT Pr IF (1 Nomen) ;
+SELECT Pr OR A IF (1 N) ;
+SELECT Pr IF (1 Nomen) (NOT 0 A) ;
 
 SELECT Pr IF (0 ("<i>"i)) ;
 
 SELECT Pr IF (0 ("<av>"i)) ;
 
-"<dess>" SELECT Adv (-1 ("sedan"));
+"<dess>" SELECT:sedan Adv (-1 ("sedan"));
+
+"<båda>" REMOVE:båda V OR N;
 
 
 REMOVE:farliga-N N + farliga-N;
@@ -239,3 +268,6 @@ SELECT Cnjcoo IF (0 ("<fast>"i)) (-1 BOS) (NOT *1 Comma);
 SELECT Cnjsub IF (0 ("<fast>"i)) (*0 Comma);
 
 REMOVE N IF (0 Här) (-1 Den + Neut) ;
+
+REMOVE:why Def IF (0 Prop) ;
+# example?
